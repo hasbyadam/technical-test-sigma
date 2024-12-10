@@ -10,7 +10,12 @@ type Handler struct {
 }
 
 func New(e *echo.Group, usecase usecase.UsecaseInterface) {
-	// handler := &Handler{
-	// 	Usecase: usecase,
-	// }
+	handler := &Handler{
+		Usecase: usecase,
+	}
+
+	v1 := e.Group("/v1")
+
+	v1.POST("/register", handler.Register)
+	v1.POST("/login", handler.Login)
 }

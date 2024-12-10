@@ -32,6 +32,7 @@ func main() {
 	e.Use(middleware.Recover(), middleware.Logger(), middleware.RequestID(), middleware.Secure())
 	main := e.Group("/")
 
+	
 	handler.New(main, &usecase.Methods{
 		Stores: store.New(config),
 		Config: config,

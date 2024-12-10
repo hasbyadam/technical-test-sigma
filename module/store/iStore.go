@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/hasbyadam/technical-test-sigma/connection"
@@ -18,5 +19,6 @@ func New(config *entity.Config) StoreInterface {
 }
 
 type StoreInterface interface {
-	
+	Register(ctx context.Context, req entity.UserDetails) (err error)
+	GetUserDetails(ctx context.Context, email string) (res entity.UserDetails, err error)
 }
