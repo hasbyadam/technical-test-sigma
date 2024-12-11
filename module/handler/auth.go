@@ -19,7 +19,7 @@ func (h *Handler) Register(c echo.Context) error {
 	}
 
 	res, err = h.Usecase.Register(context.Background(), req)
-	{
+	if err != nil {
 		return util.ErrorInternalServerResponse(c, err, res)
 	}
 
@@ -36,7 +36,7 @@ func (h *Handler) Login(c echo.Context) error {
 	}
 
 	res, err = h.Usecase.Login(context.Background(), req)
-	{
+	if err != nil {
 		return util.ErrorInternalServerResponse(c, err, res)
 	}
 

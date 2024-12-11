@@ -30,9 +30,8 @@ func init() {
 func main() {
 	e := echo.New()
 	e.Use(middleware.Recover(), middleware.Logger(), middleware.RequestID(), middleware.Secure())
-	main := e.Group("/")
+	main := e.Group("/api")
 
-	
 	handler.New(main, &usecase.Methods{
 		Stores: store.New(config),
 		Config: config,

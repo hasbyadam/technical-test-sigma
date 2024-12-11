@@ -12,7 +12,7 @@ func (c *Client) Register(ctx context.Context, req entity.UserDetails) (err erro
 (id, password, email, full_name, legal_name, nik, birth_place, birth_date, salary, ktp, ktp_selfie, created_at, created_by, is_verified)
 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 
-	if _, err := c.mysql.ExecContext(ctx, qs,
+	if _, err = c.mysql.ExecContext(ctx, qs,
 		req.Id,
 		req.Passowrd,
 		req.Email,
@@ -29,6 +29,7 @@ VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 		req.IsVerifed,
 	); err != nil {
 		zap.S().Info(err)
+		return
 	}
 
 	return

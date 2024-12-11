@@ -41,7 +41,6 @@ func generateToken(claims *entity.Claims) (res string, err error) {
 }
 
 func (u *Methods) Register(ctx context.Context, req request.Register) (res response.Register, err error) {
-
 	hashPassword, err := getHashPassword(req.Passowrd)
 	if err != nil {
 		return
@@ -65,8 +64,8 @@ func (u *Methods) Register(ctx context.Context, req request.Register) (res respo
 		IsVerifed:  false,
 	}); err != nil {
 		zap.S().Info(err)
+		return
 	}
-
 	claims := &entity.Claims{
 		Id:    userId,
 		Admin: false,
@@ -76,7 +75,9 @@ func (u *Methods) Register(ctx context.Context, req request.Register) (res respo
 	}
 
 	res.Token, err = generateToken(claims)
-
+	if err != nil {
+		zap.S().Info(err)
+	}
 	return
 }
 
@@ -99,6 +100,8 @@ func (u *Methods) Login(ctx context.Context, req request.Login) (res response.Lo
 	}
 
 	res.Token, err = generateToken(claims)
-
+	if err != nil {
+		zap.S().Info(err)
+	}
 	return
 }
