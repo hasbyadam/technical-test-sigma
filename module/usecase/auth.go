@@ -14,6 +14,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func (u *Methods) GetConfig() *entity.Config {
+	return u.Config
+}
+
 func getHashPassword(password string) (string, error) {
 	bytePassword := []byte(password)
 	hash, err := bcrypt.GenerateFromPassword(bytePassword, bcrypt.DefaultCost)
@@ -28,12 +32,12 @@ func checkPassword(hashPassword, password string) bool {
 	return err == nil
 }
 
-func generateToken(claims *entity.Claims) (res string, err error) {
+func generateToken(claims *entity.Claims, secretKey string) (res string, err error) {
 	// Create token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Generate encoded token and send it as response.
-	res, err = token.SignedString([]byte("secret"))
+	res, err = token.SignedString([]byte(secretKey))
 	if err != nil {
 		return
 	}
@@ -41,7 +45,7 @@ func generateToken(claims *entity.Claims) (res string, err error) {
 }
 
 func (u *Methods) Register(ctx context.Context, req request.Register) (res response.Register, err error) {
-	hashPassword, err := getHashPassword(req.Passowrd)
+	hashPassword, err := getHashPassword(req.Password)
 	if err != nil {
 		return
 	}
@@ -50,7 +54,7 @@ func (u *Methods) Register(ctx context.Context, req request.Register) (res respo
 	if err = u.Stores.Register(ctx, entity.UserDetails{
 		Id:         userId,
 		Email:      req.Email,
-		Passowrd:   hashPassword,
+		Password:   hashPassword,
 		FullName:   req.FullName,
 		LegalName:  req.LegalName,
 		NIK:        req.NIK,
@@ -74,7 +78,7 @@ func (u *Methods) Register(ctx context.Context, req request.Register) (res respo
 		},
 	}
 
-	res.Token, err = generateToken(claims)
+	res.Token, err = generateToken(claims, u.Config.Auth.JwtSecretKey)
 	if err != nil {
 		zap.S().Info(err)
 	}
@@ -87,7 +91,7 @@ func (u *Methods) Login(ctx context.Context, req request.Login) (res response.Lo
 	if err != nil {
 		return
 	}
-	if !checkPassword(userDetails.Passowrd, req.Password) {
+	if !checkPassword(userDetails.Password, req.Password) {
 		return res, errors.New("invalid password")
 	}
 
@@ -99,7 +103,7 @@ func (u *Methods) Login(ctx context.Context, req request.Login) (res response.Lo
 		},
 	}
 
-	res.Token, err = generateToken(claims)
+	res.Token, err = generateToken(claims, u.Config.Auth.JwtSecretKey)
 	if err != nil {
 		zap.S().Info(err)
 	}

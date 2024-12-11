@@ -1,16 +1,18 @@
 package request
 
+import "gopkg.in/guregu/null.v4"
+
 type Register struct {
-	Email      string `json:"email"`
-	Passowrd   string `json:"password"`
-	FullName   string `json:"fullName"`
-	LegalName  string `json:"legalName"`
-	NIK        string `json:"nik"`
-	BirthPlace string `json:"birthPlace"`
-	BirthDate  string `json:"birthDate"`
-	Salary     string `json:"salary"`
-	KTP        string `json:"ktp"`
-	KTPSelfie  string `json:"ktpSelfie"`
+	Email      null.String `json:"email"`
+	Password   string      `json:"password"`
+	FullName   null.String `json:"fullName"`
+	LegalName  null.String `json:"legalName"`
+	NIK        null.String `json:"nik"`
+	BirthPlace null.String `json:"birthPlace"`
+	BirthDate  null.String `json:"birthDate"`
+	Salary     null.String `json:"salary"`
+	KTP        null.String `json:"ktp"`
+	KTPSelfie  null.String `json:"ktpSelfie"`
 }
 
 type Login struct {

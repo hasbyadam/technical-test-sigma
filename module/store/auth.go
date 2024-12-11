@@ -14,7 +14,7 @@ VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 
 	if _, err = c.mysql.ExecContext(ctx, qs,
 		req.Id,
-		req.Passowrd,
+		req.Password,
 		req.Email,
 		req.FullName,
 		req.LegalName,
@@ -42,7 +42,7 @@ FROM sigma_test.users where email = ?`
 	row := c.mysql.QueryRowContext(ctx, qs, email)
 	if err = row.Scan(
 		&res.Id,
-		&res.Passowrd,
+		&res.Password,
 		&res.Email,
 		&res.FullName,
 		&res.LegalName,

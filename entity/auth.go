@@ -3,6 +3,7 @@ package entity
 import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"gopkg.in/guregu/null.v4"
 )
 
 type Claims struct {
@@ -13,16 +14,16 @@ type Claims struct {
 
 type UserDetails struct {
 	Id         uuid.UUID
-	Email      string
-	Passowrd   string
-	FullName   string
-	LegalName  string
-	NIK        string
-	BirthPlace string
-	BirthDate  string
-	Salary     string
-	KTP        string
-	KTPSelfie  string
+	Email      null.String
+	Password   string
+	FullName   null.String
+	LegalName  null.String
+	NIK        null.String
+	BirthPlace null.String
+	BirthDate  null.String
+	Salary     null.String
+	KTP        null.String
+	KTPSelfie  null.String
 	CreatedAt  int64
 	CreatedBy  uuid.UUID
 	IsVerifed  bool
