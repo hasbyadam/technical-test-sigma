@@ -20,7 +20,6 @@ func SetupMainConfig() (config *entity.Config) {
 	viper.SetConfigType("json")
 	viper.AutomaticEnv()
 	err = viper.Unmarshal(&config)
-	zap.S().Info(config)
 	if err != nil {
 		zap.S().Fatal(err)
 	}

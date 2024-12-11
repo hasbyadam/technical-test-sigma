@@ -21,6 +21,8 @@ func New(e *echo.Group, usecase usecase.UsecaseInterface) {
 	auth.POST("/register", handler.Register)
 	auth.POST("/login", handler.Login)
 
-	test := v1.Group("/withAuth")
-	test.Use(echojwt.JWT([]byte(handler.Usecase.GetConfig().Auth.JwtSecretKey)))
+	trans := v1.Group("/transaction")
+	trans.Use(echojwt.JWT([]byte(handler.Usecase.GetConfig().Auth.JwtSecretKey)))
+	
+	trans.POST("", handler.RequestTransaction)
 }

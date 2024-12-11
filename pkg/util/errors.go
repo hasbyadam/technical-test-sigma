@@ -44,3 +44,5 @@ func ErrorBadRequest(ctx echo.Context, err error, data interface{}) error {
 
 	return ctx.JSON(http.StatusBadRequest, responseData)
 }
+
+

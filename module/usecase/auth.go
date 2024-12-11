@@ -71,8 +71,8 @@ func (u *Methods) Register(ctx context.Context, req request.Register) (res respo
 		return
 	}
 	claims := &entity.Claims{
-		Id:    userId,
-		Admin: false,
+		UserId: userId,
+		Admin:  false,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
@@ -96,8 +96,8 @@ func (u *Methods) Login(ctx context.Context, req request.Login) (res response.Lo
 	}
 
 	claims := &entity.Claims{
-		Id:    userDetails.Id,
-		Admin: false,
+		UserId: userDetails.Id,
+		Admin:  false,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
@@ -106,6 +106,18 @@ func (u *Methods) Login(ctx context.Context, req request.Login) (res response.Lo
 	res.Token, err = generateToken(claims, u.Config.Auth.JwtSecretKey)
 	if err != nil {
 		zap.S().Info(err)
+	}
+	return
+}
+
+func (u *Methods) ParseTokenToClaims(tokenString string) (err error) {
+	if _, err = jwt.ParseWithClaims(tokenString, &u.Claims,
+		func(t *jwt.Token) (interface{}, error) {
+			return []byte(u.Config.Auth.JwtSecretKey), nil
+		},
+	); err != nil {
+		zap.S().Info(err)
+		return
 	}
 	return
 }
